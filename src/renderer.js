@@ -162,7 +162,7 @@ const cats = [
 
 const cycleImages = (bgNum, step) => {
     bodyId.classList.toggle('bg'+bgNum);
-    let num = Math.floor(Math.random() * 8) + 1;
+    let num = Math.floor(Math.random() * 5) + 1;
     bodyId.classList.toggle('bg'+num);
     setTimeout(() => cycleImages(num,step), step * 2)
 };
