@@ -1,9 +1,9 @@
-const fs = require('fs');
+/*const fs = require('fs');
 const dotenv = require('dotenv');
 const envConfig = dotenv.parse(fs.readFileSync('.env.override'));
 for (var k in envConfig) {
     process.env[k] = envConfig[k]
-}
+}*/
 
 var robot = require("robotjs");
 const socketio = require('socket.io');
