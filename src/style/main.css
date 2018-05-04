@@ -1,0 +1,228 @@
+html {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+    height: 100%;
+    margin: 0;
+}
+
+input, textarea, select, button, img {
+    -webkit-user-drag: none;
+}
+
+.draggable {
+    -webkit-app-region: drag;
+}
+
+.selectable {
+    -webkit-user-select: auto;
+    cursor: auto;
+}
+
+body {
+    background-color: #082532;
+    color: #40525D;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.bg1 {
+    background: #082532 url("../images/backgrounds/bg1.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg2 {
+    background: #082532 url("../images/backgrounds/bg2.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg3 {
+    background: #082532 url("../images/backgrounds/bg3.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg4 {
+    background: #082532 url("../images/backgrounds/bg4.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg5 {
+    background: #082532 url("../images/backgrounds/bg5.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg6 {
+    background: #082532 url("../images/backgrounds/bg6.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg7 {
+    background: #082532 url("../images/backgrounds/bg7.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+.bg8 {
+    background: #082532 url("../images/backgrounds/bg8.jpg");
+    background-size:cover;
+    transition: 1s ease-in-out;
+}
+
+#title-bar {
+    -webkit-app-region: drag;
+    height: 40px;
+    margin: 0;
+    flex: none;
+    display: block;
+    /*background: brown;*/
+}
+
+#title {
+    position: fixed;
+    top: 12px;
+    left: 15px;
+    padding-top: 5px;
+    color: #85E0FC;
+}
+
+#title-bar-btns {
+    -webkit-app-region: no-drag;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    /*background: #15a652;*/
+}
+
+#title-bar-btns button {
+    border: none;
+    background: none;
+    color: #85E0FC;
+    font-size: 20px;
+    text-shadow: 0 0 3px #082532,0 0 3px #082532, 0 0 10px #000;
+}
+
+#title-bar-btns button:hover {
+    text-shadow: 0 0 3px #082532,0 0 3px #082532, 0 0 5px #85E0FC,  0 0 15px #85E0FC;
+}
+
+#title-bar-btns #min-btn {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 26px;
+    position: absolute;
+    right: 30px;
+    top: -8px;
+}
+
+.wrapper {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+}
+.wrapper  > div {
+    /* these are the flex items */
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.container-Container {
+    padding: 10px;
+}
+button {
+    -webkit-app-region: no-drag;
+
+}
+
+textarea {
+    -webkit-app-region: no-drag;
+}
+button:focus {
+    outline:0;
+}
+input {
+    position: relative;
+    z-index: 999;
+}
+input:focus {outline:0;}
+
+.buttons {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.buttons button {
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    font-size: 24px;
+    text-transform: uppercase;
+    width:49%;
+    /*padding: 10px 0 34px;*/
+    text-decoration: none;
+    border: 1px solid #85E0FC;
+    box-sizing: border-box;
+}
+
+.buttons button:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#btnToggleServer {
+
+}
+.btnOff {
+    background: #082532;
+}
+
+.btnOff:hover {
+    background: #293646;
+
+}
+
+.btnOn {
+
+    background: #147612;
+
+}
+
+.btnOn:hover {
+    background: #158c13;
+}
+
+.console {
+    display: block;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    background-color: rgba(5, 20, 36, 0.9);
+    color: white;
+    height: 100%;
+    resize: none;
+    border: 1px solid #85E0FC;
+    /*background-attachment: local;
+    background-image:
+            linear-gradient(to right, #1e1e1e 10px, transparent 10px),
+            linear-gradient(to left, #1e1e1e 10px, transparent 10px),
+            repeating-linear-gradient(#1e1e1e, #1e1e1e 17px, #40525D 17px, #40525D 18px, #1e1e1e 18px);*/
+    line-height: 18px;
+    padding: 8px; /*1px 20px 8px 10px;*/
+}
+
+.console:focus {
+    outline: none;
+}
+
+.hidden {
+    display: none;
+}
+
+

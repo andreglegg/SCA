@@ -1,6 +1,6 @@
-const fs = require('fs')
-const dotenv = require('dotenv')
-const envConfig = dotenv.parse(fs.readFileSync('.env.override'))
+const fs = require('fs');
+const dotenv = require('dotenv');
+const envConfig = dotenv.parse(fs.readFileSync('.env.override'));
 for (var k in envConfig) {
     process.env[k] = envConfig[k]
 }
@@ -96,7 +96,7 @@ sock.on('connection', (socket) => {
 
         log('Client disconnected');
         Object.keys(sock.sockets.connected).forEach(function(id) {
-            log('removing : '+id)
+            log('removing : '+id);
             sock.sockets.connected[id].disconnect();
         });
 
@@ -157,7 +157,7 @@ function log(text) {
 const cats = [
     "./images/backgrounds/bg1.jpg",
     "./images/backgrounds/bg2.jpg"
-]
+];
 
 
 const cycleImages = (bgNum, step) => {
@@ -165,9 +165,9 @@ const cycleImages = (bgNum, step) => {
     let num = Math.floor(Math.random() * 8) + 1;
     bodyId.classList.toggle('bg'+num);
     setTimeout(() => cycleImages(num,step), step * 2)
-}
+};
 
-cycleImages(1,30000)
+cycleImages(1,30000);
 
 
 toggleServer.addEventListener('click', toggleServerHandler);
