@@ -2,6 +2,8 @@ const electron = require("electron");
 const {app, BrowserWindow, ipcMain} = electron;
 const {autoUpdater} = require("electron-updater");
 
+const path = require('path');
+
 let mainWindow = null;
 
 app.on("window-all-closed", () => {
@@ -11,7 +13,14 @@ app.on("window-all-closed", () => {
 });
 
 app.on("ready", () => {
-    mainWindow = new BrowserWindow({width: 450, height: 315, resizable: false, show: false, frame: false});
+    mainWindow = new BrowserWindow({
+        width: 450,
+        height: 315,
+        resizable: false,
+        show: false,
+        frame: false,
+        icon: path.join(__dirname, 'assets/icons/win/icon.ico')
+    });
     mainWindow.loadURL(`file://${ __dirname }/src/index.html`);
     //mainWindow.webContents.openDevTools();
     mainWindow.once("ready-to-show", () => {

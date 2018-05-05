@@ -168,6 +168,7 @@ input:focus {outline:0;}
     text-decoration: none;
     border: 1px solid #85E0FC;
     box-sizing: border-box;
+    transition: 0.6s background-color;
 }
 
 .buttons button:hover {
@@ -203,7 +204,7 @@ input:focus {outline:0;}
     width: 100%;
     box-sizing: border-box;
     margin-top: 8px;
-    background-color: rgba(5, 20, 36, 0.9);
+    background-color: rgba(5, 20, 36, 0.4);
     color: white;
     height: 100%;
     resize: none;
@@ -215,11 +216,38 @@ input:focus {outline:0;}
             repeating-linear-gradient(#1e1e1e, #1e1e1e 17px, #40525D 17px, #40525D 18px, #1e1e1e 18px);*/
     line-height: 18px;
     padding: 8px; /*1px 20px 8px 10px;*/
+    overflow: hidden;
+    transition: .6s background-color;
+}
+
+.console:hover {
+    overflow: auto;
+    padding-right: 1px;
+    background-color: rgba(5, 20, 36, 0.9);
 }
 
 .console:focus {
     outline: none;
 }
+
+.console::-webkit-scrollbar-track
+{
+    border-radius: 5px;
+    background-color: transparent;
+}
+
+.console::-webkit-scrollbar
+{
+    width: 6px;
+    background-color: transparent;
+}
+
+.console::-webkit-scrollbar-thumb
+{
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
 
 .hidden {
     display: none;
