@@ -12,12 +12,14 @@ const platform = require('platform');
 const pjson = require('../package.json');
 const remote = require('electron').remote;
 const {BrowserWindow} = require('electron').remote;
+const settings = remote.require('electron-settings');
 const buildEditorContextMenu = remote.require('electron-editor-context-menu');
 const express = require('express');
 const ip = require("ip");
 
 const HOST = ip.address(); //'localhost'; //'10.0.0.136';
-const PORT = 4242;
+let PORT = 5050;
+let settingsData = null;
 let status = false;
 const app = express();
 const server = http.Server(app);
@@ -30,7 +32,8 @@ let openWebLink = document.getElementById('btnWebLink');
 
 let toggleServer = document.getElementById('btnToggleServer');
 let textConsole = document.getElementById('console');
-textConsole.value = "+-------------------------------------------------+\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT+"\n+-------------------------------------------------+";
+let btnSettings = document.getElementById('btnSettings');
+
 
 window.addEventListener('contextmenu', function (e) {
     // Only show the context menu in text editors.
@@ -46,9 +49,63 @@ window.addEventListener('contextmenu', function (e) {
     }, 30);
 });
 
+const path = require('path');
+
+
+function openModal() {
+    let win = new remote.BrowserWindow({
+        parent: remote.getCurrentWindow(),
+        modal: true,
+        width: 450,
+        height: 200,
+        resizable: false,
+        frame: false,
+       // icon: path.join(__dirname, 'assets/icons/win/icon.ico')
+    })
+    //win.webContents.openDevTools();
+
+    var theUrl = path.join(__dirname, './settingsModal/settings.html')
+    console.log('url', theUrl);
+
+    win.loadURL(theUrl);
+}
+//openModal()
+//console.log(process.env.GH_TOKEN);
+
+function Setup() {
+    //settings.deleteAll();
+
+    settingsData =  settings.get('foo');
+
+    console.log(settingsData)
+    if (!settingsData) {
+        settings.set('foo', { port: '4242' });
+        settingsData =  settings.get('foo');
+        console.log(settingsData)
+
+    }
+    PORT = settingsData.port;
+    console.log(PORT)
+
+
+
+}
+
+Setup();
+log("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT+"\n+-------------------------------------------------+");
+settings.watch('foo.port', (newValue, oldValue) => {
+    console.log(oldValue + " : " + newValue);
+    // => "qux"
+    settingsData =  settings.get('foo');
+    PORT = settingsData.port;
+    log("Connection updated: " + HOST + ":" + PORT+"\n+-------------------------------------------------+");
+});
+
+
 function startServer() {
 
-
+    Setup()
+    log("Starting server....");
     log("Waiting for connection....");
     // Create a server instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
@@ -181,5 +238,11 @@ closeBtn.addEventListener('click', ()=>{
 });
 openWebLink.addEventListener('click', ()=>{
     require('electron').shell.openExternal("http://sca.andreglegg.no")
+});
+btnSettings.addEventListener('click', ()=>{
+    if (status) {
+        toggleServerHandler()
+    }
+    openModal()
 });
 

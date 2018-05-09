@@ -15,7 +15,7 @@
     ipcRenderer.on('updateReady', function(event, text) {
         // changes the text of the button
         var updateButton = document.getElementById('ready');
-        updateButton.innerHTML = "Updated!";
+        updateButton.innerHTML = "Update!";
         updateButton.classList.remove('hidden');
     })
 </script>
@@ -31,9 +31,11 @@
         </div>
     </div>
 
+
     <div class="container-Container">
         <div class="buttons">
             <button type="button" class="btnOff" id="btnToggleServer">Start</button>
+            <button type="button" class="btnOff" id="btnSettings">Settings</button>
             <button type="button" class="btnOff" id="btnWebLink">Help</button>
             <!-- the button onClick sends a quitAndInstall message to the electron main process -->
             <button id="ready" class="btnOn hidden" onClick="ipcRenderer.send('quitAndInstall')">No Updates</button>

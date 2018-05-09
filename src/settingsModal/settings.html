@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../style/main.css">
+</head>
+<body>
+<div class="wrapper draggable">
+    <div id="title-bar">
+        <div id="title">Settings</div>
+        <div id="title-bar-btns">
+            <!--
+            <button id="min-btn">_</button>
+
+                    <button id="max-btn">+</button>
+            -->
+            <button id="close-btn">&#x2716;</button>
+        </div>
+    </div>
+    <div class="container-Container settingsView">
+        <label>Port</label>
+        <input id="portInput" class="inputPort" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+               type = "number"
+               maxlength = "4" name="port">
+        <p>*Settings are saved automatically, just close this window when you are finished.</p>
+    </div>
+</div>
+
+<script>
+    // You can also require other files to run in this process
+    require('./settings.js')
+</script>
+</body>
+</html>
