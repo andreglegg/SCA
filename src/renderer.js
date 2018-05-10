@@ -92,7 +92,7 @@ function Setup() {
 }
 
 Setup();
-log("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
+log("Requires version 0.0.4 of the mobile app. \nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 settings.watch('foo.port', (newValue, oldValue) => {
     console.log(oldValue + " : " + newValue);
     // => "qux"
