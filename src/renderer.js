@@ -60,7 +60,7 @@ function openModal() {
         height: 200,
         resizable: false,
         frame: false,
-       // icon: path.join(__dirname, 'assets/icons/win/icon.ico')
+        // icon: path.join(__dirname, 'assets/icons/win/icon.ico')
     })
     //win.webContents.openDevTools();
 
@@ -69,18 +69,19 @@ function openModal() {
 
     win.loadURL(theUrl);
 }
+
 //openModal()
 //console.log(process.env.GH_TOKEN);
 
 function Setup() {
     //settings.deleteAll();
 
-    settingsData =  settings.get('foo');
+    settingsData = settings.get('foo');
 
     console.log(settingsData)
     if (!settingsData) {
-        settings.set('foo', { port: '4242' });
-        settingsData =  settings.get('foo');
+        settings.set('foo', {port: '4242'});
+        settingsData = settings.get('foo');
         console.log(settingsData)
 
     }
@@ -88,17 +89,16 @@ function Setup() {
     console.log(PORT)
 
 
-
 }
 
 Setup();
-log("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT+"\n+-------------------------------------------------+");
+log("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 settings.watch('foo.port', (newValue, oldValue) => {
     console.log(oldValue + " : " + newValue);
     // => "qux"
-    settingsData =  settings.get('foo');
+    settingsData = settings.get('foo');
     PORT = settingsData.port;
-    log("Connection updated: " + HOST + ":" + PORT+"\n+-------------------------------------------------+");
+    log("Connection updated: " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 });
 
 
@@ -110,8 +110,9 @@ function startServer() {
     // Create a server instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
 // The sock object the callback function receives UNIQUE for each connection
-    server.listen(PORT, () => log('Listening on '+ HOST +':'+PORT), {
-        'sync disconnect on unload': true });
+    server.listen(PORT, () => log('Listening on ' + HOST + ':' + PORT), {
+        'sync disconnect on unload': true
+    });
 
     console.log(server);
     //server = net.createServer(function(sock) {
@@ -134,13 +135,14 @@ sock.on('connection', (socket) => {
     }
 
     socket.on('message', (data) => {
-
-        //console.log('DATA ' + sock.remoteAddress + ': ' + data);
-        log('KEY: ' + data);
+        if (data.action === 'down') {
+            log('KEY: ' + data.key);
+        }
+        //console.log(data);
         // Write the data back to the socket, the client will receive it as data from the server
         socket.emit('response', 'You pressed: "' + data + '"');
-        sendKey(data);
-
+        //sendKey(data);
+        toggleKey(data.key, data.action, null)
     });
 
     socket.on('connected', (data) => {
@@ -152,8 +154,8 @@ sock.on('connection', (socket) => {
     socket.on('disconnect', (reason) => {
 
         log('Client disconnected');
-        Object.keys(sock.sockets.connected).forEach(function(id) {
-            log('removing : '+id);
+        Object.keys(sock.sockets.connected).forEach(function (id) {
+            log('removing : ' + id);
             sock.sockets.connected[id].disconnect();
         });
 
@@ -171,6 +173,10 @@ sock.on('connection', (socket) => {
 
 function sendKey(key) {
     robot.keyTap(key);
+}
+
+function toggleKey(key, pos, modifier) {
+    modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
 }
 
 function stopServer() {
@@ -218,28 +224,28 @@ const cats = [
 
 
 const cycleImages = (bgNum, step) => {
-    bodyId.classList.toggle('bg'+bgNum);
+    bodyId.classList.toggle('bg' + bgNum);
     let num = Math.floor(Math.random() * 5) + 1;
-    bodyId.classList.toggle('bg'+num);
-    setTimeout(() => cycleImages(num,step), step * 2)
+    bodyId.classList.toggle('bg' + num);
+    setTimeout(() => cycleImages(num, step), step * 2)
 };
 
-cycleImages(1,30000);
+cycleImages(1, 30000);
 
 
 toggleServer.addEventListener('click', toggleServerHandler);
-minBtn.addEventListener('click', ()=>{
+minBtn.addEventListener('click', () => {
     let window = remote.getCurrentWindow();
     window.minimize();
 });
-closeBtn.addEventListener('click', ()=>{
+closeBtn.addEventListener('click', () => {
     let window = remote.getCurrentWindow();
     window.close();
 });
-openWebLink.addEventListener('click', ()=>{
+openWebLink.addEventListener('click', () => {
     require('electron').shell.openExternal("http://sca.andreglegg.no")
 });
-btnSettings.addEventListener('click', ()=>{
+btnSettings.addEventListener('click', () => {
     if (status) {
         toggleServerHandler()
     }

@@ -16,15 +16,15 @@ app.on("window-all-closed", () => {
 app.on("ready", () => {
     modal.setup();
     mainWindow = new BrowserWindow({
-        width: 600,
-        height: 415,
+        width: 600*1.5,
+        height: 415*1.5,
         resizable: false,
         show: false,
         frame: false
         //icon: path.join(__dirname, 'assets/icons/win/icon.ico')
     });
     mainWindow.loadURL(`file://${ __dirname }/src/index.html`);
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
     });
