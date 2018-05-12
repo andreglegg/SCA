@@ -60,7 +60,7 @@ function openModal() {
         height: 200,
         resizable: false,
         frame: false,
-        // icon: path.join(__dirname, 'assets/icons/win/icon.ico')
+        // icon: path.join(__dirname, 'assets/icons/win/icon2.ico')
     })
     //win.webContents.openDevTools();
 
@@ -136,13 +136,13 @@ sock.on('connection', (socket) => {
 
     socket.on('message', (data) => {
         if (data.action === 'down') {
-            log('KEY: ' + data.key);
+            log('KEY: ' + data.compound ? data.compound +" + "+ data.key :  data.key);
         }
         //console.log(data);
         // Write the data back to the socket, the client will receive it as data from the server
         socket.emit('response', 'You pressed: "' + data + '"');
         //sendKey(data);
-        toggleKey(data.key, data.action, null)
+        toggleKey(data.key, data.action, data.compound ? data.compound : null)
     });
 
     socket.on('connected', (data) => {
@@ -162,7 +162,6 @@ sock.on('connection', (socket) => {
         socket.disconnect();
 
     });
-
     /*socket.on('disconnectFromClient', (data) => {
         log('Client '+data);
         log('Client closed connection from: '+clientAddress);

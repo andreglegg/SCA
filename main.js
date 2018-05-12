@@ -21,7 +21,7 @@ app.on("ready", () => {
         resizable: false,
         show: false,
         frame: false
-        //icon: path.join(__dirname, 'assets/icons/win/icon.ico')
+        //icon: path.join(__dirname, 'assets/icons/win/icon2.ico')
     });
     mainWindow.loadURL(`file://${ __dirname }/src/index.html`);
     //mainWindow.webContents.openDevTools();

@@ -1,6 +1,6 @@
 {
   "name": "Star-Citizen-Assistant",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "An assistant for Star Citizen to help control your ship",
   "main": "main.js",
   "repository": "https://github.com/andreglegg/SCA",
