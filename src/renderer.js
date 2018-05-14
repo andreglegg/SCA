@@ -194,10 +194,10 @@ sock.on('connection', (socket) => {
         log('Client disconnected');
         Object.keys(sock.sockets.connected).forEach(function (id) {
             log('removing : ' + id);
-        sock.sockets.connected[id].disconnect();
-         });
+            sock.sockets.connected[id].disconnect();
+        });
 
-        /*socket.disconnect();*/
+        socket.disconnect();
 
     });
     /*socket.on('disconnectFromClient', (data) => {
@@ -219,13 +219,6 @@ function toggleKey(key, pos, modifier) {
 
 function stopServer() {
     //console.log("Server Closed");
-    //log('Client disconnected');
-    Object.keys(sock.sockets.connected).forEach(function (id) {
-        log('removing : ' + id);
-        sock.sockets.connected[socket.id].disconnect();
-    });
-
-    sock.sockets.disconnect();
     sock.close();
     server.close();
     log("Server stopped");
