@@ -92,7 +92,7 @@ function Setup() {
 }
 
 Setup();
-log("Requires version 0.0.4 of the mobile app. \nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
+log("Requires version 0.0.6 of the mobile app. \nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 settings.watch('foo.port', (newValue, oldValue) => {
     console.log(oldValue + " : " + newValue);
     // => "qux"
@@ -104,108 +104,74 @@ settings.watch('foo.port', (newValue, oldValue) => {
 
 function startServer() {
 
-    Setup()
+    Setup();
     log("Starting server....");
     log("Waiting for connection....");
     // Create a server instance, and chain the listen function to it
-// The function passed to net.createServer() becomes the event handler for the 'connection' event
-// The sock object the callback function receives UNIQUE for each connection
+    // The function passed to net.createServer() becomes the event handler for the 'connection' event
+    // The sock object the callback function receives UNIQUE for each connection
     server.listen(PORT, () => log('Listening on ' + HOST + ':' + PORT), {
         'sync disconnect on unload': true
     });
 
-    console.log(server);
-    //server = net.createServer(function(sock) {
-
-    // We have a connection - a socket object is assigned to the connection automatically
-    //console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
-    //log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
-    // Add a 'data' event handler to this instance of socket
-
+    //console.log(server);
 }
 
 sock.on('connection', (socket) => {
 
-    socket.emit('connected', 'Connected to server');
-    //log(sock);
+    //socket.emit('connected', 'Connected to server');
     let clientAddress = socket.handshake.address;
-    //const serverAddress = socket.handshake.headers.host;
     if (clientAddress.substr(0, 7) == "::ffff:") {
         clientAddress = clientAddress.substr(7)
     }
+    log('Client connected from ' + clientAddress + ' with id: ' + socket.id);
 
-    socket.on('message', (data) => {
-        let logData = data.key;
-        //log(data.action);
-        switch(data.action) {
-            case 'down':
-                if (data.compound) {
-                    logData = 'hold '+data.compound + " + " + data.key;
-                    toggleKey(data.key, data.action, data.compound)
-                } else {
-                    logData = 'hold '+ data.key;
-                    toggleKey(data.key, data.action, null)
-                }
-                break;
-            case 'up':
-                if (data.compound) {
-                    logData = 'release ' + data.compound + " + " + data.key;
-                    toggleKey(data.key, data.action, data.compound)
-                } else {
-                    logData = 'release '+ data.key;
-                    toggleKey(data.key, data.action, null)
-                }
-                break;
-            default:
-                if (data.compound) {
-                    logData = 'tap ' + data.compound + " + " + data.key;
-                    sendKey(data.key, data.compound)
-                } else {
-                    sendKey(data.key)
-                }
-
-        }
-
-        /*if (data.action === 'in') {
-            if (data.compound !== '') {
-                logData = data.compound + " + " + data.key;
-                toggleKey(data.key, data.action, data.compound ? data.compound : null)
-            } else {
-                logData = data.key
-            }
-
-            //log('KEY: ' + compound ? compound +" + "+ data.key :  data.key);
-        } else {
-            sendKey(data.key)
-        }*/
-        log('KEY: ' + logData);
-
-        //socket.emit('response', 'You pressed: "' + data + '"');
+    socket.on('ping', () => {
+        log('send pong');
+        socket.emit('pong');
     });
 
-    socket.on('connected', (data) => {
-        log('Client connected from ' + clientAddress);
-        socket.emit('connected', 'Connected to server');
+    socket.on('sendTapKey', (data) => {
+        let compound = undefined;
+        let logData = data.action + ': ' + data.key;
+        if (!!data.compound) {
+            compound = data.compound;
+            logData = data.action +': '+ data.compound +' + '+ data.key;
+        }
+        sendKey(data.key, compound);
+        log(logData);
+    });
 
+    socket.on('sendToggleKey', (data) => {
+        let compound = undefined;
+        let logData = data.action + ': ' + data.key;
+        if (!!data.compound) {
+            compound = data.compound;
+            logData = data.action +': '+ data.compound +' + '+ data.key;
+        }
+        toggleKey(data.key, data.action, compound,);
+        if (data.action === 'down'){
+            // log only once?
+        }
+        log(logData);
     });
 
     socket.on('disconnect', (reason) => {
-
-        log('Client disconnected');
-        Object.keys(sock.sockets.connected).forEach(function (id) {
-            log('removing : ' + id);
+        if (reason === 'server namespace disconnect'){
+            reason = 'server closed the connection'
+        }else if (reason === 'client namespace disconnect'){
+            reason = 'client closed the connection.'
+        }
+        log('Disconnected ('+reason+'). Client: '+socket.id+' '+clientAddress);
+        /*Object.keys(sock.sockets.connected).forEach(function (id) {
+            //log(reason);
+            log('Removing client : ' + id);
             sock.sockets.connected[id].disconnect();
         });
 
-        socket.disconnect();
+        socket.disconnect();*/
 
     });
-    /*socket.on('disconnectFromClient', (data) => {
-        log('Client '+data);
-        log('Client closed connection from: '+clientAddress);
-        socket.emit('disconnectFromClient', 'Client closed connection');
-
-    });*/
 });
 
 function sendKey(key, modifier) {
@@ -219,7 +185,16 @@ function toggleKey(key, pos, modifier) {
 
 function stopServer() {
     //console.log("Server Closed");
-    sock.close();
+    console.log(server);
+    //log('Client disconnected');
+    Object.keys(sock.sockets.connected).forEach(function (id) {
+        //log(reason);
+        log('Removing client : ' + id);
+        sock.sockets.connected[id].disconnect();
+    });
+
+    //socket.disconnect();
+    //sock.close();
     server.close();
     log("Server stopped");
 }
