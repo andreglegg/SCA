@@ -135,14 +135,52 @@ sock.on('connection', (socket) => {
     }
 
     socket.on('message', (data) => {
-        if (data.action === 'down') {
-            log('KEY: ' + data.compound ? data.compound +" + "+ data.key :  data.key);
+        let logData = data.key;
+        //log(data.action);
+        switch(data.action) {
+            case 'down':
+                if (data.compound) {
+                    logData = 'hold '+data.compound + " + " + data.key;
+                    toggleKey(data.key, data.action, data.compound)
+                } else {
+                    logData = 'hold '+ data.key;
+                    toggleKey(data.key, data.action, null)
+                }
+                break;
+            case 'up':
+                if (data.compound) {
+                    logData = 'release ' + data.compound + " + " + data.key;
+                    toggleKey(data.key, data.action, data.compound)
+                } else {
+                    logData = 'release '+ data.key;
+                    toggleKey(data.key, data.action, null)
+                }
+                break;
+            default:
+                if (data.compound) {
+                    logData = 'tap ' + data.compound + " + " + data.key;
+                    sendKey(data.key, data.compound)
+                } else {
+                    sendKey(data.key)
+                }
+
         }
-        //console.log(data);
-        // Write the data back to the socket, the client will receive it as data from the server
-        socket.emit('response', 'You pressed: "' + data + '"');
-        //sendKey(data);
-        toggleKey(data.key, data.action, data.compound ? data.compound : null)
+
+        /*if (data.action === 'in') {
+            if (data.compound !== '') {
+                logData = data.compound + " + " + data.key;
+                toggleKey(data.key, data.action, data.compound ? data.compound : null)
+            } else {
+                logData = data.key
+            }
+
+            //log('KEY: ' + compound ? compound +" + "+ data.key :  data.key);
+        } else {
+            sendKey(data.key)
+        }*/
+        log('KEY: ' + logData);
+
+        //socket.emit('response', 'You pressed: "' + data + '"');
     });
 
     socket.on('connected', (data) => {
@@ -156,10 +194,10 @@ sock.on('connection', (socket) => {
         log('Client disconnected');
         Object.keys(sock.sockets.connected).forEach(function (id) {
             log('removing : ' + id);
-            sock.sockets.connected[id].disconnect();
-        });
+        sock.sockets.connected[id].disconnect();
+         });
 
-        socket.disconnect();
+        /*socket.disconnect();*/
 
     });
     /*socket.on('disconnectFromClient', (data) => {
@@ -170,16 +208,24 @@ sock.on('connection', (socket) => {
     });*/
 });
 
-function sendKey(key) {
-    robot.keyTap(key);
+function sendKey(key, modifier) {
+    modifier ? robot.keyTap(key, modifier) : robot.keyTap(key);
 }
 
 function toggleKey(key, pos, modifier) {
+    //log("toggle key"+modifier+key);
     modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
 }
 
 function stopServer() {
     //console.log("Server Closed");
+    //log('Client disconnected');
+    Object.keys(sock.sockets.connected).forEach(function (id) {
+        log('removing : ' + id);
+        sock.sockets.connected[socket.id].disconnect();
+    });
+
+    sock.sockets.disconnect();
     sock.close();
     server.close();
     log("Server stopped");
