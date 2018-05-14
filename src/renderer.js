@@ -18,12 +18,12 @@ const express = require('express');
 const ip = require("ip");
 
 const HOST = ip.address(); //'localhost'; //'10.0.0.136';
-let PORT = 5050;
+let PORT = 4242;
 let settingsData = null;
 let status = false;
 const app = express();
 const server = http.Server(app);
-const sock = socketio(server);
+const sock = socketio(server, {'pingInterval': 4000});
 
 const bodyId = document.getElementById("body");
 let minBtn = document.getElementById('min-btn');
@@ -65,7 +65,7 @@ function openModal() {
     //win.webContents.openDevTools();
 
     var theUrl = path.join(__dirname, './settingsModal/settings.html')
-    console.log('url', theUrl);
+    //console.log('url', theUrl);
 
     win.loadURL(theUrl);
 }
@@ -78,15 +78,15 @@ function Setup() {
 
     settingsData = settings.get('foo');
 
-    console.log(settingsData)
+    //console.log(settingsData)
     if (!settingsData) {
         settings.set('foo', {port: '4242'});
         settingsData = settings.get('foo');
-        console.log(settingsData)
+        //console.log(settingsData)
 
     }
     PORT = settingsData.port;
-    console.log(PORT)
+    //console.log(PORT)
 
 
 }
@@ -94,7 +94,7 @@ function Setup() {
 Setup();
 log("Requires version 0.0.6 of the mobile app. \nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 settings.watch('foo.port', (newValue, oldValue) => {
-    console.log(oldValue + " : " + newValue);
+    //console.log(oldValue + " : " + newValue);
     // => "qux"
     settingsData = settings.get('foo');
     PORT = settingsData.port;
@@ -127,7 +127,7 @@ sock.on('connection', (socket) => {
     log('Client connected from ' + clientAddress + ' with id: ' + socket.id);
 
     socket.on('ping', () => {
-        log('send pong');
+        //console.log('send pong');
         socket.emit('pong');
     });
 
@@ -185,7 +185,7 @@ function toggleKey(key, pos, modifier) {
 
 function stopServer() {
     //console.log("Server Closed");
-    console.log(server);
+    //console.log(server);
     //log('Client disconnected');
     Object.keys(sock.sockets.connected).forEach(function (id) {
         //log(reason);
