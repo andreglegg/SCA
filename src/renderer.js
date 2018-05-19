@@ -138,7 +138,9 @@ sock.on('connection', (socket) => {
             compound = data.compound;
             logData = data.action +': '+ data.compound +' + '+ data.key;
         }
-        sendKey(data.key, compound);
+        //sendKey(data.key, compound);
+        toggleKey(data.key, 'down', compound);
+         setTimeout( () => { console.log('up release'); toggleKey(data.key, 'up', compound)},100);
         log(logData);
     });
 
@@ -149,11 +151,15 @@ sock.on('connection', (socket) => {
             compound = data.compound;
             logData = data.action +': '+ data.compound +' + '+ data.key;
         }
-        toggleKey(data.key, data.action, compound,);
+        //toggleKey(data.key, data.action, compound,);
         if (data.action === 'down'){
             // log only once?
+            let logData = 'tap: ' + data.key;
+            toggleKey(data.key, 'down', compound);
+            setTimeout( () => { console.log('up release'); toggleKey(data.key, 'up', compound)},100);
+            log(logData);
         }
-        log(logData);
+
     });
 
     socket.on('disconnect', (reason) => {
@@ -180,7 +186,8 @@ function sendKey(key, modifier) {
 
 function toggleKey(key, pos, modifier) {
     //log("toggle key"+modifier+key);
-    modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
+    console.log(pos)
+    //modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
 }
 
 function stopServer() {
