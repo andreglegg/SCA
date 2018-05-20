@@ -4,8 +4,8 @@ const envConfig = dotenv.parse(fs.readFileSync('.env.override'));
 for (var k in envConfig) {
     process.env[k] = envConfig[k]
 }*/
-
-var robot = require("robotjs");
+var ks = require('./key-sender');
+//var robot = require("robotjs");
 const socketio = require('socket.io');
 const http = require('http');
 const platform = require('platform');
@@ -18,12 +18,12 @@ const express = require('express');
 const ip = require("ip");
 
 const HOST = ip.address(); //'localhost'; //'10.0.0.136';
-let PORT = 4242;
+let PORT = 5050;
 let settingsData = null;
 let status = false;
 const app = express();
 const server = http.Server(app);
-const sock = socketio(server, {'pingInterval': 4000});
+const sock = socketio(server);
 
 const bodyId = document.getElementById("body");
 let minBtn = document.getElementById('min-btn');
@@ -65,7 +65,7 @@ function openModal() {
     //win.webContents.openDevTools();
 
     var theUrl = path.join(__dirname, './settingsModal/settings.html')
-    //console.log('url', theUrl);
+    console.log('url', theUrl);
 
     win.loadURL(theUrl);
 }
@@ -78,23 +78,23 @@ function Setup() {
 
     settingsData = settings.get('foo');
 
-    //console.log(settingsData)
+    console.log(settingsData)
     if (!settingsData) {
         settings.set('foo', {port: '4242'});
         settingsData = settings.get('foo');
-        //console.log(settingsData)
+        console.log(settingsData)
 
     }
     PORT = settingsData.port;
-    //console.log(PORT)
+    console.log(PORT)
 
 
 }
 
 Setup();
-log("Requires version 0.0.6 of the mobile app. \nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
+log("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
 settings.watch('foo.port', (newValue, oldValue) => {
-    //console.log(oldValue + " : " + newValue);
+    console.log(oldValue + " : " + newValue);
     // => "qux"
     settingsData = settings.get('foo');
     PORT = settingsData.port;
@@ -127,39 +127,35 @@ sock.on('connection', (socket) => {
     log('Client connected from ' + clientAddress + ' with id: ' + socket.id);
 
     socket.on('ping', () => {
-        //console.log('send pong');
+        //log('send pong');
         socket.emit('pong');
     });
 
     socket.on('sendTapKey', (data) => {
-        let compound = undefined;
+        let compound = "null";
         let logData = data.action + ': ' + data.key;
         if (!!data.compound) {
             compound = data.compound;
             logData = data.action +': '+ data.compound +' + '+ data.key;
+            //ks.sendCombination([compound, data.key]);
         }
-        //sendKey(data.key, compound);
-        toggleKey(data.key, 'down', compound);
-         setTimeout( () => { console.log('up release'); toggleKey(data.key, 'up', compound)},100);
+        ks.toggleKey("-key "+data.key+" -action down -modifier "+ compound);
+        ks.toggleKey("-key "+data.key+" -action up -modifier "+ compound);
         log(logData);
     });
-
     socket.on('sendToggleKey', (data) => {
-        let compound = undefined;
-        let logData = data.action + ': ' + data.key;
+        let logData = 'toggle: ' + data.key + ' ' + data.action;
+        let compound = "null";
         if (!!data.compound) {
             compound = data.compound;
-            logData = data.action +': '+ data.compound +' + '+ data.key;
+            //ks.toggleKey("-key "+data.key+" -action "+data.action + " -modifier "+ compound);Hh
+        } else {
+            //ks.toggleKey("-key "+data.key+" -action "+data.action);
         }
-        //toggleKey(data.key, data.action, compound,);
-        if (data.action === 'down'){
-            // log only once?
-            let logData = 'tap: ' + data.key;
-            toggleKey(data.key, 'down', compound);
-            setTimeout( () => { console.log('up release'); toggleKey(data.key, 'up', compound)},100);
-            log(logData);
-        }
-
+        ks.toggleKey("-key "+data.key+" -action "+data.action + " -modifier "+ compound);
+        //toggleKey(data.key, data.action, compound);
+        //ks.toggleKey("-key "+data.key+" -action "+data.action + compound ?  " -modifier "+ compound : "null");
+        log(logData);
     });
 
     socket.on('disconnect', (reason) => {
@@ -180,19 +176,21 @@ sock.on('connection', (socket) => {
     });
 });
 
+/*
 function sendKey(key, modifier) {
     modifier ? robot.keyTap(key, modifier) : robot.keyTap(key);
 }
 
 function toggleKey(key, pos, modifier) {
     //log("toggle key"+modifier+key);
-    console.log(pos)
-    //modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
+    console.log(pos+': '+key)
+    modifier ? robot.keyToggle(key, pos, modifier) : robot.keyToggle(key, pos);
 }
+*/
 
 function stopServer() {
     //console.log("Server Closed");
-    //console.log(server);
+    console.log(server);
     //log('Client disconnected');
     Object.keys(sock.sockets.connected).forEach(function (id) {
         //log(reason);
