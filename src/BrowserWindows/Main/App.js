@@ -6,11 +6,7 @@ import Window from '../../Containers/Window';
 import Toolbar from '../../Components/Toolbar/Toolbar'
 import Clients from '../../Components/Clients/Clients'
 import Console from '../../Components/Console/Console'
-import WatchJS from 'melanke-watchjs';
 
-var watch = WatchJS.watch;
-var unwatch = WatchJS.unwatch;
-var callWatchers = WatchJS.callWatchers;
 const remote = window.require('electron').remote;
 const platform = require('platform');
 const settings = remote.require('electron-settings');
@@ -42,7 +38,15 @@ class App extends Component {
 
     componentDidMount(){
         PORT = settings.get('settings').port;
-        this.LOG("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
+        const txtLogo = "\n .d8888b.   .d8888b.        d8888 \n" +
+            "d88P  Y88b d88P  Y88b      d88888 \n" +
+            "Y88b.      888    888     d88P888 \n" +
+            " \"Y888b.   888           d88P 888 \n" +
+            "    \"Y88b. 888          d88P  888 \n" +
+            "      \"888 888    888  d88P   888 \n" +
+            "Y88b  d88P Y88b  d88P d8888888888 \n" +
+            " \"Y8888P\"   \"Y8888P\" d88P     888 \n"
+        this.LOG(txtLogo+"\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
         window.addEventListener('beforeunload', this.componentCleanup);
         io.on('connection', (socket) =>{
             this.LOG(socket.handshake.address.substr(7) + ' connected');
@@ -60,7 +64,8 @@ class App extends Component {
                 this.LOG(data.key +' '+ data.action +' '+ data.compound)
             });
             socket.on('disconnect', (data) => {
-                this.LOG(data);
+                const log = socket.handshake.address.substr(7) + " " + data;
+                this.LOG(log);
                 window.require('electron').shell.beep();
                 const clientsArray = [...this.state.connectedClients];
                 const index = clientsArray.indexOf(socket);
@@ -84,7 +89,7 @@ class App extends Component {
     toggleServerHandler () {
         if (this.state.status) {
             this.stopServer();
-            this.LOG('Server stopped')
+            this.LOG('Server stopped\n+-------------------------------------------------+')
         } else {
             remote.getGlobal('server').listen(PORT);
             this.LOG('Server started and listening on ' + HOST +':'+ PORT)

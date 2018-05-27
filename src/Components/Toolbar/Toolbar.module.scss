@@ -6,6 +6,12 @@
     align-content: center;
     flex-direction: row;
     height: 50px;
+    .ConnectWrap {
+        width: 130px;
+        a {
+            display: inline-block;
+        }
+    }
     .Space {
         flex:.8;
     }

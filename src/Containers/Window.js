@@ -26,7 +26,7 @@ class Window extends Component {
             this.setState({
                 background: image
             })
-        }, 30000);
+        }, 60*1000);
     }
 
     componentWillUnmount() {

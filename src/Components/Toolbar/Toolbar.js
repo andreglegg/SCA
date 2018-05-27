@@ -3,12 +3,10 @@ import classes from './Toolbar.module.scss'
 import Button from '../Ui/Button/Button'
 
 var remote = window.require('electron').remote;
-const {ipcRenderer} = window.require('electron');
 const path = require('path');
 
 const Toolbar = (props) => {
     const connectText = props.status ? "Online [" + props.clientCount + "]" : "Offline";
-    const color = null;
     const isDev = () => {
         return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
     };
@@ -24,7 +22,7 @@ const Toolbar = (props) => {
             show: false
             // icon: path.join(__dirname, 'assets/icons/win/icon2.ico')
         });
-        win.webContents.openDevTools();
+        //win.webContents.openDevTools();
         win.loadURL(
             isDev
                 ? 'http://localhost:3000?settings'
@@ -47,7 +45,7 @@ const Toolbar = (props) => {
 
     return (
         <div className={classes.Toolbar}>
-            <Button type="connection" status={props.status} onClick={props.toggleServer}> {connectText}  </Button>
+            <div className={classes.ConnectWrap}><Button type="connection" status={props.status} onClick={props.toggleServer}> {connectText}  </Button></div>
             <div className={classes.Space}></div>
             <Button onClick={() => window.require('electron').shell.openExternal("http://sca.andreglegg.no")}> Help </Button>
             <Button onClick={() => openModal()}> Settings </Button>

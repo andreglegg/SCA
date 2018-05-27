@@ -2,15 +2,19 @@
     font-family: 'Orbitron';
     font-style: normal;
     font-weight: 400;
-    src: url('./Assets/fonts/Orbitron-Regular.ttf'); /* IE9 Compat Modes */
-    src: local('Orbitron')
+    src: url('./Assets/fonts/Orbitron-Regular.ttf');
 }
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    src: url('./Assets/fonts/Roboto-Regular.ttf'); /* IE9 Compat Modes */
-    src: local('Roboto')
+    src: url('./Assets/fonts/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Monaco';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./Assets/fonts/monaco.ttf');
 }
 
 html {
