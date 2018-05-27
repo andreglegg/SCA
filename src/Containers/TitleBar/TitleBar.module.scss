@@ -1,0 +1,44 @@
+.TitleBar {
+        -webkit-app-region: drag;
+        height: 40px;
+        margin: 0;
+        flex: none;
+        display: block;
+        /*background: brown;*/
+
+    .Title {
+        position: fixed;
+        top: 12px;
+        left: 15px;
+        padding-top: 5px;
+        color: #85E0FC;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    .TitleBarBtns {
+        -webkit-app-region: no-drag;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        /*background: #15a652;*/
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #85E0FC;
+            font-size: 20px;
+            text-shadow: 0 0 3px #082532,0 0 3px #082532, 0 0 10px #000;
+            &:hover {
+                text-shadow: 0 0 3px #082532,0 0 3px #082532, 0 0 5px #85E0FC,  0 0 15px #85E0FC;
+            }
+        }
+        .MinBtn {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 26px;
+            position: absolute;
+            right: 30px;
+            top: -8px;
+        }
+    }
+}

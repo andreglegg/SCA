@@ -1,0 +1,17 @@
+@import "../../cssvars.scss";
+.Settings {
+    h4 {
+        margin: 6px 0;
+    }
+    .PortInput {
+        color: $lightBlue;
+        font-size: 2rem;
+        line-height: 2.4rem;
+        vertical-align: middle;
+        background: #1e1e1e;
+        border: none;
+        border-bottom: 3px solid $lightBlue;
+        width: 100px;
+        padding: 3px 10px;
+    }
+}

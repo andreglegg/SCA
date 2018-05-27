@@ -1,0 +1,54 @@
+@import "../../../cssvars.scss";
+
+.Button {
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    text-decoration: none;
+    /*background-image: url("../../../Assets/3px-tile.png");
+    background-repeat: repeat;*/
+    background-color: lighten($primaryDark, 10%);
+    padding: 0.6em 1em;
+    color: $lightBlue;
+    border-radius: 6px;
+    border: 1px solid $lightBlue;
+    border-bottom: 4px solid $lightBlue;
+    box-shadow: 0 3px 3px rgba($primaryDark, 0.5);
+
+    &:hover {
+        background-color: lighten($primary, 5%);
+        transform: translateY(1px);
+    }
+    &:active {
+        background-color: $primary;
+        border-bottom: 2px solid $lightBlue;
+        transform: translateY(2px);
+        box-shadow: 0 1px 1px $primaryDark;
+    }
+}
+
+.Connected {
+    color: $white;
+    background-color: lighten($green, 10%);
+    border: 1px solid $green;
+    border-bottom: 4px solid $green;
+    box-shadow: 0 3px 3px rgba($primaryDark, 0.5);
+    &:hover {background-color: lighten($green, 5%);}
+    &:active {
+        background-color: lighten($green, 5%);
+        box-shadow: 0 1px 1px $primaryDark;
+        border-bottom: 2px solid $green;
+    }
+}
+.Disconnected {
+    color: $white;
+    background-color: lighten($red, 10%);
+    border: 1px solid $red;
+    border-bottom: 4px solid $red;
+    box-shadow: 0 3px 3px rgba($primaryDark, 0.5);
+    &:hover {background-color: lighten($red, 5%);}
+    &:active {
+        background-color: lighten($red, 5%);
+        box-shadow: 0 1px 1px $primaryDark;
+        border-bottom: 2px solid $red;
+    }
+}

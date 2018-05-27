@@ -1,0 +1,12 @@
+@import "../../cssvars.scss";
+.Toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    align-content: center;
+    flex-direction: row;
+    height: 50px;
+    .Space {
+        flex:.8;
+    }
+}

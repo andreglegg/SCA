@@ -1,0 +1,33 @@
+@import "../cssvars.scss";
+.Window {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    background: #082532;
+    -webkit-app-region: drag;
+    /*div {
+        !* these are the flex items *!
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }*/
+    .Wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        -webkit-app-region: no-drag;
+    }
+    .LoaderWrap {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
