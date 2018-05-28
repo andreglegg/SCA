@@ -18,6 +18,8 @@ const HOST = ip.address();
 
 const server = remote.getGlobal('server');
 const io = remote.getGlobal('io');
+io.set('heartbeat timeout', 10000);
+io.set('heartbeat interval', 5000);
 
 class App extends Component {
 
@@ -46,7 +48,7 @@ class App extends Component {
             "      \"888 888    888  d88P   888 \n" +
             "Y88b  d88P Y88b  d88P d8888888888 \n" +
             " \"Y8888P\"   \"Y8888P\" d88P     888 \n"
-        this.LOG(txtLogo+"\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
+        this.LOG("\nStar Citizen Assistant Server version: " + pjson.version + "\nOS version: " + platform.os + "\nStart the server then connect your client to " + HOST + ":" + PORT + "\n+-------------------------------------------------+");
         window.addEventListener('beforeunload', this.componentCleanup);
         io.on('connection', (socket) =>{
             this.LOG(socket.handshake.address.substr(7) + ' connected');

@@ -8,14 +8,18 @@ const Clients = (props) => {
     const renderClientList = props.data.map((item, index) => {
         const address = item.handshake.address.substr(7);
         return(
-            <ul key={index}>
-                <li onClick={() => item.disconnect()}><span className={classes.Close}><Icon icon={cross}/></span>{address}</li>
-            </ul>
+                <li key={index} onClick={() => item.disconnect()}><span className={classes.Close}><Icon icon={cross}/></span>{address}</li>
         )
     });
+
+    let Ul = null;
+    if (renderClientList.length !== 0) {
+        Ul = (<ul>{renderClientList}</ul>)
+    }
+
     return (
         <div className={classes.Clients}>
-            {renderClientList}
+            {Ul}
         </div>
     );
 };
