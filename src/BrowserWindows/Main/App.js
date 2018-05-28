@@ -7,6 +7,7 @@ import Toolbar from '../../Components/Toolbar/Toolbar'
 import Clients from '../../Components/Clients/Clients'
 import Console from '../../Components/Console/Console'
 
+//const ks = require('../../key-sender');
 const remote = window.require('electron').remote;
 const platform = require('platform');
 const settings = remote.require('electron-settings');
@@ -15,6 +16,8 @@ const ip = remote.getGlobal('ip');
 let PORT = 5050;
 
 const HOST = ip.address();
+
+const ks = remote.getGlobal('ks');
 
 const server = remote.getGlobal('server');
 const io = remote.getGlobal('io');
@@ -39,6 +42,9 @@ class App extends Component {
     }
 
     componentDidMount(){
+        if(!settings.get('settings')) {
+            settings.set('settings', {port: '4242'});
+        }
         PORT = settings.get('settings').port;
         const txtLogo = "\n .d8888b.   .d8888b.        d8888 \n" +
             "d88P  Y88b d88P  Y88b      d88888 \n" +
@@ -60,10 +66,21 @@ class App extends Component {
                 socket.emit('pong');
             });
             socket.on('sendTapKey', (data) => {
-                this.LOG(data.key +' '+ data.action +' '+ data.compound)
+                let compound = "null";
+                if (!!data.compound) {
+                    compound = data.compound;
+                }
+                ks.toggleKey("-key "+data.key+" -action down -modifier "+ compound);
+                ks.toggleKey("-key "+data.key+" -action up -modifier "+ compound);
+                this.LOG(data.key +' '+ data.compound +' '+ data.action)
             });
             socket.on('sendToggleKey', (data) =>{
-                this.LOG(data.key +' '+ data.action +' '+ data.compound)
+                let compound = "null";
+                if (!!data.compound) {
+                    compound = data.compound;
+                }
+                ks.toggleKey("-key "+data.key+" -action "+data.action + " -modifier "+ compound);
+                this.LOG(data.key +' '+ data.compound +' '+ data.action)
             });
             socket.on('disconnect', (data) => {
                 const log = socket.handshake.address.substr(7) + " " + data;

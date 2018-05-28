@@ -9,6 +9,7 @@ global.server = require('http').createServer();
 global.io = require('socket.io')(global.server);
 global.ip = require("ip");
 global.sharedObj = {status: false};
+global.ks = require('./key-sender');
 
 let connectionStatus = false;
 
@@ -67,7 +68,7 @@ function createWindow () {
     mainWindow.loadURL(isDev ? 'http://localhost:3000?main' : `file://${path.join(__dirname, '../build/index.html?main')}`);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
     });

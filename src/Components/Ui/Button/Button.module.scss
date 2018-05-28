@@ -14,6 +14,7 @@
     border-bottom: 4px solid $lightBlue;
     box-shadow: 0 3px 3px rgba($primaryDark, 0.5);
     cursor: pointer;
+    font-weight: bold;
     &:hover {
         background-color: lighten($primary, 5%);
         transform: translateY(1px);
