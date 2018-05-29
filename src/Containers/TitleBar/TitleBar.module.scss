@@ -36,9 +36,7 @@
             display: inline-block;
             font-weight: bold;
             font-size: 26px;
-            position: absolute;
-            right: 30px;
-            top: -8px;
+            transform:translateY(-5px);
         }
     }
 }

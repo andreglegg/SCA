@@ -1,15 +1,14 @@
 {
   "name": "Star-Citizen-Assistant",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "An assistant for Star Citizen to help control your ship",
   "repository": "https://github.com/andreglegg/SCA",
   "private": true,
   "dependencies": {
-    "compass-mixins": "^0.12.10",
     "custom-react-scripts": "^0.2.2",
     "electron-is-dev": "^0.3.0",
     "electron-settings": "^3.2.0",
-    "melanke-watchjs": "^1.4.3",
+    "electron-updater": "^2.21.10",
     "platform": "^1.3.5",
     "react": "^16.3.2",
     "react-awesome-button": "^4.2.0",
@@ -26,7 +25,8 @@
   "main": "src/electron-starter.js",
   "scripts": {
     "start": "nf start -p 3000",
-    "build": "react-scripts build",
+    "build": "build --win",
+    "react-build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
@@ -34,8 +34,9 @@
     "react-start": "react-scripts start",
     "node-start": "node src/Server",
     "pack": "build --dir",
-    "dist": "npm run build && build",
-    "postinstall": "install-app-deps"
+    "dist": "npm run react-build && build",
+    "postinstall": "install-app-deps",
+    "ship": "npm run react-build && build --win -p always"
   },
   "build": {
     "appId": "sca.andreglegg.no",

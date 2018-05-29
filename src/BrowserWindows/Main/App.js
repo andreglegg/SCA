@@ -6,6 +6,7 @@ import Window from '../../Containers/Window';
 import Toolbar from '../../Components/Toolbar/Toolbar'
 import Clients from '../../Components/Clients/Clients'
 import Console from '../../Components/Console/Console'
+import UpdateButton from '../../Components/UpdateButton/UpdateButton'
 
 //const ks = require('../../key-sender');
 const remote = window.require('electron').remote;
@@ -110,6 +111,7 @@ class App extends Component {
             this.stopServer();
             this.LOG('Server stopped\n+-------------------------------------------------+')
         } else {
+            PORT = settings.get('settings').port;
             remote.getGlobal('server').listen(PORT);
             this.LOG('Server started and listening on ' + HOST +':'+ PORT)
             //console.log(server.address());
@@ -165,6 +167,7 @@ class App extends Component {
                      <Clients data={this.state.connectedClients}/>
                 <Console output={this.state.consoleOutput}/>
                 </div>
+                <UpdateButton/>
             </Window>
         );
     }

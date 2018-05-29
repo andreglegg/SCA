@@ -3,7 +3,7 @@ import classes from './Toolbar.module.scss'
 import Button from '../Ui/Button/Button'
 
 var remote = window.require('electron').remote;
-const path = require('path');
+const path = remote.getGlobal('settingsPath');
 
 const Toolbar = (props) => {
     const connectText = props.status ? "Online [" + props.clientCount + "]" : "Offline";
@@ -23,11 +23,7 @@ const Toolbar = (props) => {
             // icon: path.join(__dirname, 'assets/icons/win/icon2.ico')
         });
         //win.webContents.openDevTools();
-        win.loadURL(
-            isDev
-                ? 'http://localhost:3000?settings'
-                : `file://${path.join(__dirname, '../build/index.html?settings')}`
-        );
+        win.loadURL(path);
         win.once("ready-to-show", () => {
             win.show();
         });
