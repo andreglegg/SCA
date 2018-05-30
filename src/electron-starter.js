@@ -134,7 +134,7 @@ app.on('ready', function () {
     createWindow()
     mainWindow.webContents.on('did-finish-load', () => {
         autoUpdater.autoDownload = false;
-        autoUpdater.allowPrerelease = true;
+        //autoUpdater.allowPrerelease = true;
         autoUpdater.checkForUpdatesAndNotify();
 
     })
