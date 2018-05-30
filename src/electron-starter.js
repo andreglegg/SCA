@@ -5,6 +5,7 @@ const isDev = require('electron-is-dev');
 
 const app = electron.app;
 
+const log = require('electron-log');
 const path = require('path');
 const url = require('url');
 
@@ -41,6 +42,10 @@ ipcMain.on('stopServer', () => {
     global.server.close()
 });*/
 
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
 
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
@@ -50,6 +55,11 @@ const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+function sendStatusToWindow(tag, data) {
+    log.info(data);
+    mainWindow.webContents.send(tag, data);
+}
 
 function createWindow () {
     // Create the browser window.
@@ -70,7 +80,9 @@ function createWindow () {
     mainWindow.loadURL(isDev ? 'http://localhost:3000?main' : `file://${path.join(__dirname, '../build/index.html?main')}`);
 
     // Open the DevTools.
+
     //mainWindow.webContents.openDevTools();
+
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
     });
@@ -86,12 +98,46 @@ function createWindow () {
     })
 }
 
+//autoUpdater.checkForUpdates();
+autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('checking-for-update',{message: 'Checking for update...'});
+})
+autoUpdater.on('update-available', (info) => {
+    sendStatusToWindow('update-available',{message: 'Update available.'});
+    //appUpdater.downloadUpdate();
+    //appUpdater.downloadUpdate(cancellationToken)
+    autoUpdater.downloadUpdate()
+})
+autoUpdater.on('update-not-available', (info) => {
+    sendStatusToWindow('update-not-available',{message: 'Update not available.'});
+})
+autoUpdater.on('error', (err) => {
+    sendStatusToWindow('error',{message: 'Error in auto-updater. ' + err});
+})
+autoUpdater.on('download-progress', (progressObj) => {
+    /*let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';*/
+    sendStatusToWindow('download-progress',{percentDown: progressObj.percent, speed: progressObj.bytesPerSecond });
+})
+// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
+autoUpdater.on('update-downloaded', (info) => {
+    sendStatusToWindow('update-downloaded',{message: 'updateReady'})
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
-    autoUpdater.checkForUpdates();
+    //autoUpdater.checkForUpdates();
+
     createWindow()
+    mainWindow.webContents.on('did-finish-load', () => {
+        autoUpdater.autoDownload = false;
+        autoUpdater.allowPrerelease = true;
+        autoUpdater.checkForUpdatesAndNotify();
+
+    })
 });
 
 // Quit when all windows are closed.
@@ -111,10 +157,8 @@ app.on('activate', function () {
     }
 });
 
-// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
-autoUpdater.on('update-downloaded', (info) => {
-    mainWindow.webContents.send('updateReady')
-});
+
+
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on("quitAndInstall", (event, arg) => {
