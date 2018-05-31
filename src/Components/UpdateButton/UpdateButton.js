@@ -49,6 +49,8 @@ export default class UpdateButton extends Component {
                 showStatus: false,
                 updateMessage: data.message
             })
+
+
         })
 
         ipcRenderer.on('download-progress', (event, data) => {
